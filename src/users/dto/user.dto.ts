@@ -9,24 +9,20 @@ import {
 
 export class CreateUserDto {
     @MaxLength(20, {
-        message: "Invalid name format, less than 20 characters",
-        })
+      message: "Invalid username format, less than 20 letters",
+    })
     @MinLength(3, {
-        message: "Invalid name format, more than 3 characters",
-      })
+      message: "Invalid username format, more than 3 letters",
+    })
     @Matches(/^[A-z,0-9_]+(?:\s[A-z,0-9_]+)*$/, {
-        message: "Invalid name format, only letters and spaces",
+        message: "Invalid username format, only letters and spaces",
       })
     @IsString()
     @IsNotEmpty()
     username: string;
   
-    @MaxLength(20, {
-        message: "Invalid name format, less than 20 characters",
-      })
-    @MinLength(3, {
-        message: "Invalid name format, more than 3 characters",
-      })
+    @MaxLength(20)
+    @MinLength(3)
     @IsString()
     @IsNotEmpty()
     password: string;
