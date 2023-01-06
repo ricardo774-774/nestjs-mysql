@@ -4,12 +4,11 @@ import {
     Post, 
     Get, 
     Param, 
-    ParseIntPipe, 
-    Req, 
+    ParseIntPipe,
     Res,
-    Query,
     HttpStatus,
     NotFoundException,
+    Delete,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/user.dto';
@@ -41,16 +40,39 @@ export class UsersController {
         console.log("Param:", id);
         const user = await this.usersService.getUser(id);
         if(!user) 
-          throw new NotFoundException('User does not exist, try another id');
+          throw new NotFoundException('User not found, try another id');
         return res.status(HttpStatus.OK).json({
             user,
         });
     }
 
     @Post() 
-    create(@Body() _user: CreateUserDto): Promise<User> {
-        const user = this.usersService.createUser(_user);
-        return user;
+    async create(
+      @Res() res, 
+      @Body() _user: CreateUserDto,
+    ): Promise<User> {
+        console.log('POST /users/');  
+        console.log("Body:", JSON.stringify(_user));
+        const user = await this.usersService.createUser(_user);
+        return res.status(HttpStatus.OK).json({
+            message: `User ${(await user).username} created successfully`,
+            user,
+        });
     }
+
+    @Delete(':id') 
+    async delete(
+      @Res() res,
+      @Param('id', ParseIntPipe) id: number,
+    ) {
+        console.log("DELETE /users/:id");
+        console.log("Param:", id);
+        const user = await this.usersService.getUser(id);
+        if(!user) throw new NotFoundException('User not found, try another id');
+        await this.usersService.deleteUser(id);
+        return res.status(HttpStatus.OK).json({
+            message: `User ${(await user).username} deleted successfully`,
+        });
+    }    
 
 }
