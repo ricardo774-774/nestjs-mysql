@@ -1,4 +1,16 @@
-import { Body, Controller, Post, Get, Param, ParseIntPipe } from '@nestjs/common';
+import { 
+    Body, 
+    Controller, 
+    Post, 
+    Get, 
+    Param, 
+    ParseIntPipe, 
+    Req, 
+    Res,
+    Query,
+    HttpStatus,
+    NotFoundException,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/user.dto';
 import { User } from './entity/user.entity';
@@ -10,15 +22,29 @@ export class UsersController {
     ) {}
 
     @Get() 
-    getAll(): Promise<User[]> {
-        const users = this.usersService.gerUsers();
-        return users;
+    async getAll(
+      @Res() res,
+    ): Promise<User[]> {
+        console.log("GET /users");
+        const users = await this.usersService.gerUsers();
+        return res.status(HttpStatus.OK).json({
+            users,
+        });
     }
 
     @Get(':id') 
-    getOne(@Param('id', ParseIntPipe) id: number): Promise<User> {
-        const user = this.usersService.getUser(id);
-        return user;
+    async getOne(
+      @Res() res,
+      @Param('id', ParseIntPipe) id: number,
+    ): Promise<User> {
+        console.log("GET /users/:id");
+        console.log("Param:", id);
+        const user = await this.usersService.getUser(id);
+        if(!user) 
+          throw new NotFoundException('User does not exist, try another id');
+        return res.status(HttpStatus.OK).json({
+            user,
+        });
     }
 
     @Post() 
