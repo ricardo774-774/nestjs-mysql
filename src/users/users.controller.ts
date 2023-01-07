@@ -56,7 +56,7 @@ export class UsersController {
         console.log("Body:", JSON.stringify(_user));
         const user = await this.usersService.createUser(_user);
         return res.status(HttpStatus.OK).json({
-            message: `User ${(await user).username} created successfully`,
+            message: `User ${user.username} created successfully`,
             user,
         });
     }
@@ -72,7 +72,7 @@ export class UsersController {
         if(!user) throw new NotFoundException('User not found, try another id');
         await this.usersService.deleteUser(id);
         return res.status(HttpStatus.OK).json({
-            message: `User ${(await user).username} deleted successfully`,
+            message: `User ${user.username} deleted successfully`,
         });
     }    
 
@@ -88,7 +88,7 @@ export class UsersController {
         const user = await this.usersService.getUser(id);
         if(!user) throw new NotFoundException('User not found, try another id');
         return res.status(HttpStatus.OK).json({
-            message: `User ${(await user).username} updated successfully`,
+            message: `User ${user.username} updated successfully`,
             user,
         });
     }
