@@ -9,9 +9,10 @@ import {
     HttpStatus,
     NotFoundException,
     Delete,
+    Put,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/user.dto';
+import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
 import { User } from './entity/user.entity';
 
 @Controller('users')
@@ -74,5 +75,22 @@ export class UsersController {
             message: `User ${(await user).username} deleted successfully`,
         });
     }    
+
+    @Put(':id') 
+    async update(
+      @Res() res, 
+      @Param('id', ParseIntPipe) id: number,
+      @Body() _user: UpdateUserDto,
+    ): Promise<User> {
+        console.log('PUT /users/:id');  
+        console.log("Body:", JSON.stringify(_user));
+        await this.usersService.updateUser(id, _user);
+        const user = await this.usersService.getUser(id);
+        if(!user) throw new NotFoundException('User not found, try another id');
+        return res.status(HttpStatus.OK).json({
+            message: `User ${(await user).username} updated successfully`,
+            user,
+        });
+    }
 
 }
