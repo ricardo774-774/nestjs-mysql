@@ -5,6 +5,7 @@ import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { AuthsModule } from './auths/auths.module';
 import { ConfigModule } from '@nestjs/config';
+import { TasksModule } from './tasks/tasks.module';
 const envModule = ConfigModule.forRoot({
   isGlobal: true,
 });
@@ -25,6 +26,7 @@ const envModule = ConfigModule.forRoot({
     }),
     UsersModule,
     AuthsModule,
+    TasksModule,
   ],
   controllers: [AppController],
   providers: [AppService],
