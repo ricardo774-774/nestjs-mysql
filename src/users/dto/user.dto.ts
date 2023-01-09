@@ -22,8 +22,12 @@ export class CreateUserDto {
   @IsNotEmpty()
   username: string;
 
-  @MaxLength(20)
-  @MinLength(3)
+  @MaxLength(20, {
+    message: "Invalid password format, less than 20 letters",
+  })
+  @MinLength(6, {
+    message: "Invalid password format, more than 6 letters",
+  })
   @IsString()
   @IsNotEmpty()
   password: string;
@@ -33,7 +37,7 @@ export class CreateUserDto {
   email: string;
 }
 
-export class UpdateUserDto{
+export class UpdateUserDto {
   @MaxLength(20, {
     message: "Invalid username format, less than 20 letters",
   })
