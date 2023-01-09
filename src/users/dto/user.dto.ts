@@ -47,14 +47,4 @@ export class UpdateUserDto{
   @IsNotEmpty()
   @IsOptional()
   username: string;
-
-  @MinLength(3, {
-    message: "Invalid format, more than 3 letters",
-  })
-  @MinLength(3, {
-    message: "Invalid format, less than 10 letters",
-  })
-  @IsString()
-  @IsOptional()
-  authFrom: string;
 }
